@@ -8,6 +8,8 @@ in return server will give a unique id/session id back to the client and keep a 
 now whenever the client makes a server request it also sends this unqiue/session id. the server cross checks the 
 validity of this unique id from its own list and then responds accordingly.
 
+state is basically some data with which with map o say match something in this case it is handled by the valet or in other words the server
+
 this u_id can be transferred as cookie, respose or headers.
 
 we use middleware to check this id and if valid the middleware forwards to the next router or reject it from that point itself.
