@@ -1,0 +1,52 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Link Shortener</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; background: #f0f0f0; }
+    input, button { padding: 0.5rem; margin-right: 0.5rem; width: 300px; }
+    .url-list { margin-top: 2rem; }
+    .url-item { padding: 0.5rem; background: white; margin-bottom: 0.5rem; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Shorten your URL</h2>
+  <input type="text" id="urlInput" placeholder="Enter full URL" />
+  <button onclick="shortenUrl()">Shorten</button>
+
+  <p id="shortenedUrl"></p>
+
+  <div class="url-list" id="urlList"></div>
+
+  <script>
+    async function shortenUrl() {
+      const url = document.getElementById("urlInput").value;
+      const res = await fetch("/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ originalUrl: url }),
+      });
+      const data = await res.json();
+      document.getElementById("shortenedUrl").innerHTML = 
+        `<strong>Shortened URL:</strong> <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+      loadUrls();
+    }
+
+    async function loadUrls() {
+      const res = await fetch("/all");
+      const urls = await res.json();
+      const list = urls.map(u => `
+        <div class="url-item">
+          <strong>Original:</strong> <a href="${u.originalUrl}" target="_blank">${u.originalUrl}</a><br>
+          <strong>Short:</strong> <a href="${u.shortUrl}" target="_blank">${u.shortUrl}</a><br>
+          <strong>Clicks:</strong> ${u.clicks || 0}
+        </div>
+      `).join('');
+      document.getElementById("urlList").innerHTML = list;
+    }
+
+    loadUrls();
+  </script>
+</body>
+</html>

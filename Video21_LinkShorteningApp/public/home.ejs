@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Link Shortener</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 2rem;
+      background: #f0f0f0;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+      width: 300px;
+    }
+    .url-list {
+      margin-top: 2rem;
+    }
+    .url-item {
+      padding: 0.5rem;
+      background: white;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Shorten your URL</h2>
+
+  <!-- FORM submits to backend -->
+  <form action="/shorten" method="POST">
+    <input
+      type="text"
+      name="originalUrl"
+      placeholder="Enter full URL"
+      required
+    />
+    <button type="submit">Shorten</button>
+  </form>
+
+  <!-- Show newly created short URL if present -->
+  <% if (shortUrl) { %>
+    <p>
+      <strong>Shortened URL:</strong>
+      <a href="<%= shortUrl %>" target="_blank"><%= shortUrl %></a>
+    </p>
+  <% } %>
+
+  <!-- URL LIST -->
+  <div class="url-list">
+    <% if (Array.isArray(urls) && urls.length > 0) { %>
+      <% urls.forEach(url => { %>
+        <div class="url-item">
+          <strong>Original:</strong>
+          <a href="<%= url.originalUrl %>" target="_blank">
+            <%= url.originalUrl %>
+          </a>
+          <br />
+
+          <strong>Short:</strong>
+          <a href="<%= url.shortUrl %>" target="_blank">
+            <%= url.shortUrl %>
+          </a>
+          <br />
+
+          <strong>Clicks:</strong> <%= url.clicks %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No URLs found.</p>
+    <% } %>
+  </div>
+
+</body>
+</html>

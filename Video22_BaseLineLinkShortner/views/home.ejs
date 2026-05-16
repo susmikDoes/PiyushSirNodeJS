@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Shortener</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; }
+    input, button { padding: 0.5rem; }
+    table { margin-top: 2rem; width: 100%; }
+  </style>
+</head>
+<body>
+
+<h2>URL Shortener</h2>
+
+<form action="/shorten" method="POST">
+  <input type="text" name="originalUrl" placeholder="Enter URL" required />
+  <button type="submit">Generate</button>
+</form>
+
+<% if (shortUrl) { %>
+  <p>
+    <strong>Shortened URL:</strong>
+    <a href="<%= shortUrl %>" target="_blank"><%= shortUrl %></a>
+  </p>
+<% } %>
+
+<table border="1" cellpadding="10">
+  <tr>
+    <th>#</th>
+    <th>Short</th>
+    <th>Original</th>
+    <th>Clicks</th>
+  </tr>
+
+  <% urls.forEach((u, i) => { %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><a href="<%= u.shortUrl %>"><%= u.shortUrl %></a></td>
+      <td><%= u.originalUrl %></td>
+      <td><%= u.clicks %></td>
+    </tr>
+  <% }) %>
+</table>
+
+</body>
+</html>
